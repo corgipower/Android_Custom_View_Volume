@@ -18,6 +18,12 @@ class VolumeView(context: Context?, attrs: AttributeSet?) : View(context, attrs)
     private var startY: Float = 0f
     private var diffX: Float = 0f
     private var diffY: Float = 0f
+    private var centerX = width / 2f
+    private var centerY = height / 2f
+    private var minRotation = 0f
+    private var maxRotation = 180f
+    private var rotate = 0f
+    private var canvas:Canvas? = null
 
     init {
 
@@ -30,10 +36,11 @@ class VolumeView(context: Context?, attrs: AttributeSet?) : View(context, attrs)
                 startY = event.y
             }
             MotionEvent.ACTION_UP -> {
-                diffX = event.x - startX
-                diffY = event.y - startY
+                diffX = event.x - centerX
+                diffY = event.y - centerY
             }
             MotionEvent.ACTION_MOVE -> {
+
             }
         }
         invalidate()
@@ -43,7 +50,7 @@ class VolumeView(context: Context?, attrs: AttributeSet?) : View(context, attrs)
     private fun largeCircle(canvas: Canvas?) {
         val w = width/3f
         val h = height/3f
-        var r = 0f
+        val r: Float
 
         if (w >= h) {
             r = w
@@ -61,7 +68,8 @@ class VolumeView(context: Context?, attrs: AttributeSet?) : View(context, attrs)
 
         val w = width/15f
         val h = height/15f
-        var r = 0f
+        val r: Float
+
 
         if (w >= h) {
             r = w
@@ -71,12 +79,13 @@ class VolumeView(context: Context?, attrs: AttributeSet?) : View(context, attrs)
 
         paint.setColor(Color.RED)
 
-        canvas?.drawCircle(width/2f, height/2f, r, paint)
+        canvas?.rotate(90f, width / 2f, height / 2f)
+        canvas?.drawCircle(width/5f, height/2f, r, paint)
     }
 
     override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
         largeCircle(canvas)
         smallCircle(canvas)
+        super.onDraw(canvas)
     }
 }
